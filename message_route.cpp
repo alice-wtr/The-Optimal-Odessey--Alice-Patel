@@ -19,38 +19,39 @@ int main() {
 
         }
 
-        //cout << "I AM HERE" << endl; 
+//      cout << "I AM HERE" << endl; 
 
         queue<int> frontier;
-        vector<char> nodes;
+        vector<char> nodes(n, 'u');
         vector<int> parent(n);
 
         parent[0] = -1;
 
-        for(int i=0; i<n; i++){
-                nodes.push_back('u');
-        }
-
-        //cout << "HERE IS I" << endl; 
 
 
-        int end;
+   //     cout << "HERE IS I" << endl;
+
+
+        int end = -1;
 
         frontier.push(0);
+        nodes[0] = 's';
         while(frontier.size() != 0) {
                 int x = frontier.front();
                 frontier.pop();
 
                 int l = adj[x].size();
-                nodes[x] = 's';
+
 
                 for(int i=0; i<l; i++) {
-                        if(adj[x][i] == n-1) {
+                        if(adj[x][i] == n-1 && nodes[adj[x][i]] != 's') {
+                                nodes[adj[x][i]] = 's';
                                 end = adj[x][i];
                                 parent[adj[x][i]] = x;
                        break;   }
 
                         if(nodes[adj[x][i]] == 'u') {
+                        nodes[adj[x][i]] = 's';
                         frontier.push(adj[x][i]);
                         parent[adj[x][i]] = x;
                         }
@@ -58,6 +59,8 @@ int main() {
         }
         //cout << "IT IS ME." << endl; 
         vector<int> path(0);
+
+        if(end == -1) {cout << "IMPOSSIBLE"; return 0;}
 
         int t = end;
 
@@ -74,4 +77,3 @@ int main() {
                 cout << path[i] + 1 << " ";
         }
 }
-
