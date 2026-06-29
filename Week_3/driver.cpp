@@ -331,7 +331,7 @@ int main(int argc, char* argv[]){
             out["dijkstra"]["path_found"] = path_found;
             out["dijkstra"]["path_length"] = path_length;
             out["dijkstra"]["nodes_explored"] = nodes_explored;
-            out["dijkstra"]["time"] = time;
+            out["dijkstra"]["time_ms"] = time;
 
             // Reset
             nodes_explored = 0;
@@ -346,7 +346,7 @@ int main(int argc, char* argv[]){
             out["astar_euclidean"]["path_length"] = path_length;
             out["astar_euclidean"]["nodes_explored"] = nodes_explored;
             
-            out["astar_euclidean"]["time"] = time;
+            out["astar_euclidean"]["time_ms"] = time;
 
             // Reset
             nodes_explored = 0;
@@ -360,7 +360,7 @@ int main(int argc, char* argv[]){
             out["astar_manhattan"]["path_length"] = path_length;
             out["astar_manhattan"]["nodes_explored"] = nodes_explored;
             
-            out["astar_manhattan"]["time"] = time;
+            out["astar_manhattan"]["time_ms"] = time;
 
             
             output_json["results"].push_back(out);
