@@ -120,6 +120,7 @@ void astar_euclidean(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         Node node = frontier.top().second;
         
         frontier.pop();
+        if (node.so_far != distance[node.x][node.y]) continue;
 
         if(node.x == goal.x && node.y == goal.y){
             //found
@@ -167,6 +168,7 @@ void astar_manhattan(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         Node node = frontier.top().second;
         
         frontier.pop();
+        if (node.so_far != distance[node.x][node.y]) continue;
 
         if(node.x == goal.x && node.y == goal.y){
             //found
@@ -214,6 +216,7 @@ void dijkstra(Graph& map, Node& start, Node& goal, int& nodes_explored, int& pat
         Node node = frontier.top().second;
         
         frontier.pop();
+        if (node.so_far != distance[node.x][node.y]) continue;
 
         if(node.x == goal.x && node.y == goal.y){
             //found
@@ -363,7 +366,7 @@ int main(int argc, char* argv[]){
             output_json["results"].push_back(out);
 
             
-    }
+    } }
 
     ofstream outfile(output_file);
 
@@ -375,4 +378,4 @@ int main(int argc, char* argv[]){
     outfile << output_json.dump(4);
 
     return 0;
-} }
+ }
