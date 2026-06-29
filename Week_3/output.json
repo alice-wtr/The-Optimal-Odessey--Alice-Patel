@@ -5,22 +5,22 @@
     "results": [
         {
             "astar_euclidean": {
-                "nodes_explored": 181,
+                "nodes_explored": 178,
                 "path_found": true,
-                "path_length": 178,
-                "time": 0.09709999710321426
+                "path_length": 58,
+                "time": 0.09399999678134918
             },
             "astar_manhattan": {
-                "nodes_explored": 177,
+                "nodes_explored": 171,
                 "path_found": true,
-                "path_length": 171,
-                "time": 0.08569999784231186
+                "path_length": 58,
+                "time": 0.09200000017881393
             },
             "dijkstra": {
                 "nodes_explored": 183,
                 "path_found": true,
-                "path_length": 183,
-                "time": 0.08749999850988388
+                "path_length": 58,
+                "time": 0.09430000185966492
             },
             "id": 1
         }

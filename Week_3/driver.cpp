@@ -124,16 +124,18 @@ void astar_euclidean(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         if(node.x == goal.x && node.y == goal.y){
             //found
             path_found = true;
-            path_length++;
+            nodes_explored++;
+            path_length = node.so_far;
             break;
         }
-        path_length++;
+        nodes_explored++;
 
 
         for(auto n: map.get_neighbors(node)) {
 
                 int new_dist = distance[node.x][node.y] + 1;
                 if (new_dist < distance[n.x][n.y]) {
+                    n.so_far = node.so_far + 1;
                     distance[n.x][n.y] = new_dist;
                     frontier.push({-(new_dist + eu(n, goal)), n});
                 }
@@ -142,11 +144,7 @@ void astar_euclidean(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         }
 
 
-    for(int i=0; i<map.rows; i++) {
-        for(int j =0; j<map.cols; j++){
-            if(distance[i][j] < numeric_limits<int>::max()) nodes_explored++;
-        }
-    }
+    
 
     auto end_time = chrono::high_resolution_clock::now();
 
@@ -173,16 +171,18 @@ void astar_manhattan(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         if(node.x == goal.x && node.y == goal.y){
             //found
             path_found = true;
-            path_length++;
+            nodes_explored++;
+            path_length = node.so_far;
             break;
         }
-        path_length++;
+        nodes_explored++;
 
 
         for(auto n: map.get_neighbors(node)) {
 
                 int new_dist = distance[node.x][node.y] + 1;
                 if (new_dist < distance[n.x][n.y]) {
+                    n.so_far = node.so_far + 1;
                     distance[n.x][n.y] = new_dist;
                     frontier.push({-(new_dist + mn(n, goal)), n});
                 }
@@ -191,13 +191,9 @@ void astar_manhattan(Graph& map, Node& start, Node& goal, int& nodes_explored, i
         }
 
 
-    for(int i=0; i<map.rows; i++) {
-        for(int j =0; j<map.cols; j++){
-            if(distance[i][j] < numeric_limits<int>::max()) nodes_explored++;
-        }
-    }
+    
 
-    auto end_time = chrono::high_resolution_clock::now();
+auto end_time = chrono::high_resolution_clock::now();
 
 time = chrono::duration<float, milli>(end_time - start_time).count();
 
@@ -222,16 +218,18 @@ void dijkstra(Graph& map, Node& start, Node& goal, int& nodes_explored, int& pat
         if(node.x == goal.x && node.y == goal.y){
             //found
             path_found = true;
-            path_length++;
+            nodes_explored++;
+            path_length = node.so_far;
             break;
         }
-        path_length++;
+        nodes_explored++;
 
 
         for(auto n: map.get_neighbors(node)) {
 
                 int new_dist = distance[node.x][node.y] + 1;
                 if (new_dist < distance[n.x][n.y]) {
+                    n.so_far = node.so_far + 1;
                     distance[n.x][n.y] = new_dist;
                     frontier.push({-(new_dist + dj(n, goal)), n});
                 }
@@ -240,11 +238,7 @@ void dijkstra(Graph& map, Node& start, Node& goal, int& nodes_explored, int& pat
         }
 
 
-    for(int i=0; i<map.rows; i++) {
-        for(int j =0; j<map.cols; j++){
-            if(distance[i][j] < numeric_limits<int>::max()) nodes_explored++;
-        }
-    }
+    
 
     auto end_time = chrono::high_resolution_clock::now();
 
@@ -315,8 +309,8 @@ int main(int argc, char* argv[]){
         }*/
         
         if(type == "find_path") {
-            Node start = {{-1,-1}, numeric_limits<int>::max(), {event["start"]["x"], event["start"]["y"]}}; 
-            Node goal = {{-1,-1}, numeric_limits<int>::max(), {event["goal"]["x"], event["goal"]["y"]}};
+            Node start = {{-1,-1}, 0, {event["start"]["x"], event["start"]["y"]}}; 
+            Node goal = {{-1,-1}, -1, {event["goal"]["x"], event["goal"]["y"]}};
 
 
             int nodes_explored = 0; 
@@ -379,10 +373,6 @@ int main(int argc, char* argv[]){
     }
 
     outfile << output_json.dump(4);
-
-    return 0;
-
-    
 
     return 0;
 } }
