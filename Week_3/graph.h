@@ -35,12 +35,79 @@ class Graph {
     int cols;
     vector<std::vector<char>> gra;
 
+    int n;
+    vector<int> no;
+    vector<vector<pair<int, int>>> adj;
+    vector<vector<int>> dist;
+    const int INF = 1e9;
+
+
     
     Graph(nlohmann::json& graph) {
-        inp = graph;
-        get_size();
-        parse();
+        if (graph.contains("grid_size")) {
+            inp = graph;
+            get_size();
+            parse(); 
+        }
 
+        else if (graph.contains("nodes")) {
+            inp = graph;
+            get_nodes();
+            make_adj();
+            make_dist();
+        }
+
+    }
+
+    void get_nodes(){
+        
+        for(const auto& node: inp["nodes"]){
+            no.push_back(node); 
+        }
+
+        n = no.size();
+        
+    }
+
+    void make_adj(){
+        adj.resize(n);
+
+        for(const auto& edge:inp["edges"]){
+            adj[edge["u"]].push_back({edge["v"], edge["w"]});
+            adj[edge["v"]].push_back({edge["u"], edge["w"]});
+        }
+    }
+
+    void make_dist(){
+        dist.assign(n, vector<int>(n, INF)); 
+        
+        for(int i =0; i<n; i++){
+            dijj(i);
+        }
+    }
+
+    void dijj(int i){
+
+        priority_queue<pair<int, int>> frontier;
+        dist[i][i] = 0;
+        frontier.push({0, i});
+
+        while(!frontier.empty()){
+            int d = -frontier.top().first; 
+            int c = frontier.top().second;
+            frontier.pop();
+
+            if (d != dist[i][c]) continue;
+
+            for(const auto& nbr : adj[c]){
+                if(dist[i][nbr.first] > nbr.second + dist[i][c]) {
+                    dist[i][nbr.first] = nbr.second + dist[i][c];
+                    frontier.push({-dist[i][nbr.first], nbr.first});
+                }
+
+            }
+ 
+        }
     }
     
     void get_size(){

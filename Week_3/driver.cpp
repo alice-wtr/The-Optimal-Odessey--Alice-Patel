@@ -15,6 +15,16 @@
 
 using namespace std;
 
+void TSPBruteForce(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>& nodes) {
+
+    int min = 1e9;
+    sort(nodes.begin(), nodes.end());
+
+    do {
+        
+    } while (next_permutation(nodes.begin(), nodes.end()));    
+}
+
 
 
 
@@ -135,7 +145,15 @@ int main(int argc, char* argv[]){
             output_json["results"].push_back(out);
 
             
-    } }
+    } 
+
+    else if(type == "tsp")
+
+    
+
+
+
+}
 
     ofstream outfile(output_file);
 
