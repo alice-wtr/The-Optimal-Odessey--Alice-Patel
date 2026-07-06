@@ -17,12 +17,24 @@ using namespace std;
 
 void TSPBruteForce(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>& nodes) {
 
-    int min = 1e9;
+    
     sort(nodes.begin(), nodes.end());
+    int l = nodes.size();
 
     do {
+
+        int path = 0;
+        for(int i = 0; i<l-1; i++){
+            path = path + map.dist[nodes[i]][nodes[i+1]];
+        }
+        path = path + map.dist[nodes[l-1]][nodes[0]];
+
+        if(path < optimal_cost) {optimal_cost = path; tour = nodes;}
+
         
-    } while (next_permutation(nodes.begin(), nodes.end()));    
+    } while (next_permutation(nodes.begin(), nodes.end()));   
+    
+    tour.push_back(tour[0]);
 }
 
 
@@ -147,9 +159,18 @@ int main(int argc, char* argv[]){
             
     } 
 
-    else if(type == "tsp")
+    else if(type == "tsp") {
+        nlohmann::json out;
+        out["id"] = event["id"];
+        int optimal_cost = 1e9;
+        vector<int> nodes = event["nodes"];
+        vector<int> tour;
+        TSPBruteForce(map, optimal_cost, tour, nodes);
+        out["brute_force"]["optimal_cost"] = optimal_cost;
+        out["brute_force"]["tour"] = tour;
+        output_json["results"].push_back(out);
+    }
 
-    
 
 
 
