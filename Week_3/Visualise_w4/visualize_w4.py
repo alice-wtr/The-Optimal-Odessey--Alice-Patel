@@ -19,8 +19,8 @@ def compare_results(file1, file2):
         
         for i in range(min(len(res1), len(res2))):
             id1 = res1[i].get("query_id", i)
-            cost1 = res1[i].get("cost", "N/A")
-            cost2 = res2[i].get("cost", "N/A")
+            cost1 = res1[i].get("optimal_cost", "N/A")
+            cost2 = res2[i].get("optimal_cost", "N/A")
             
             diff = ""
             if isinstance(cost1, (int, float)) and isinstance(cost2, (int, float)):

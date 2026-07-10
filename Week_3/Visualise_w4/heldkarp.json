@@ -1,0 +1,38 @@
+{
+    "meta": {
+        "id": "assignment_03"
+    },
+    "results": [
+        {
+            "brute_force": {
+                "optimal_cost": 24,
+                "tour": [
+                    0,
+                    2,
+                    3,
+                    7,
+                    5,
+                    0
+                ]
+            },
+            "id": 1
+        },
+        {
+            "brute_force": {
+                "optimal_cost": 28,
+                "tour": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    7,
+                    6,
+                    5,
+                    4,
+                    0
+                ]
+            },
+            "id": 2
+        }
+    ]
+}

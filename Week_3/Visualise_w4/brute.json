@@ -1,15 +1,17 @@
 {
     "meta": {
-        "id": "assignment_02"
+        "id": "assignment_03"
     },
     "results": [
         {
             "brute_force": {
-                "optimal_cost": 8,
+                "optimal_cost": 24,
                 "tour": [
                     0,
-                    1,
                     2,
+                    3,
+                    7,
+                    5,
                     0
                 ]
             },
@@ -17,12 +19,16 @@
         },
         {
             "brute_force": {
-                "optimal_cost": 18,
+                "optimal_cost": 28,
                 "tour": [
                     0,
                     1,
-                    4,
+                    2,
                     3,
+                    7,
+                    6,
+                    5,
+                    4,
                     0
                 ]
             },

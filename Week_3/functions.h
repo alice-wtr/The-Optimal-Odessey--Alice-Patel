@@ -5,6 +5,9 @@
 
 using namespace std;
 
+
+void TSPBruteForce(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>& nodes);
+void TSPHeldKarp(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>& nodes);
 void astar_euclidean(Graph& map, Node& start, Node& goal, int& nodes_explored, int& path_length, bool& path_found, float& time);
 void astar_manhattan(Graph& map, Node& start, Node& goal, int& nodes_explored, int& path_length, bool& path_found, float& time);
 void dijkstra(Graph& map, Node& start, Node& goal, int& nodes_explored, int& path_length, bool& path_found, float& time);
