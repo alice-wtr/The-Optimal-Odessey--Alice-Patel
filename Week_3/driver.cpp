@@ -11,6 +11,8 @@
 #include "graph.h"
 #include "functions.h"
 
+int INF = 1e9;
+
 
 
 using namespace std;
@@ -37,6 +39,77 @@ void TSPBruteForce(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>
     tour.push_back(tour[0]);
 }
 
+//apologies for the excessive comments, this algo was hard to understand and i am certain i will forget next time i try to read it
+//(she says, as if anyone else is going to read it)
+void TSPHeldKarp(Graph &map, int& optimal_cost, vector<int>& tour, vector<int>& nodes){
+
+    //dp is basically dp[which cities have been visited][current city] note first index is integer. if it's 100 then it will be stored simply as 4 not as integer hundred
+
+    int n = nodes.size();
+    int been = (1<<n);
+
+    vector<vector<int>> dp(1 << n, vector<int>(n, INF));
+    vector<vector<int>> parent(1<<n, vector<int>(n, -1));
+    dp[1][0] = 0;
+    parent[1][0] = -2;
+
+    for(int i = 0; i<been; i++){
+        for(int j = 0; j<n; j++) {
+
+
+            //this is technically not necessary because every state would be visited by the previous layer of seeing. i.e. we start with 1 city and it 'next wala loop' 
+            //would ensure all masks with 2 city are not infinity. 2 cities would ensure all 3 city masks are non infinity etc.
+
+            //this is for the case the graph is not connected 
+            if(dp[i][j] == INF) continue;
+
+            //if j is not in mask that's an impossible situation. why would it end in j if j has not been visited? so we skip those cases
+            if (!(i & (1 << j))) continue;
+
+            for(int next=0; next<n; next++){
+                // if next is 3 and n is 5 1<<next = 00101 and suppose i is 10101. then & of both is 00100 which is non zero, hence the city has been visited
+                if((1<<next)&i) continue;
+
+                if(dp[(1<<next)|i][next] > dp[i][j] + map.dist[nodes[j]][nodes[next]]) {
+                    dp[(1<<next)|i][next] = dp[i][j] + map.dist[nodes[j]][nodes[next]];
+                    parent[(1<<next)|i][next] = j;
+
+                }
+
+                //dp[(1<<next)|i][next] = min(dp[(1<<next)|i][next], dp[i][j] + map.dist[nodes[j]][nodes[next]]);
+            }
+
+        }
+    }
+
+    int ans = INF;
+    int all_been = (1<<n) - 1;
+    
+    int last = -1;
+
+    for (int i = 0; i < n; i++) {
+        int cost = dp[all_been][i] + map.dist[nodes[i]][nodes[0]];
+        if (cost < ans) {
+            ans = cost;
+            last = i;
+        }
+    }
+
+    optimal_cost = ans;
+
+    int mask = all_been;
+    int city = last;
+
+    while (city != -2)
+    {
+        tour.push_back(nodes[city]);
+        int prev = parent[mask][city];
+        mask ^= (1 << city);
+        city = prev;
+    }
+    reverse(tour.begin(), tour.end());
+    tour.push_back(nodes[0]);
+}
 
 
 
@@ -162,12 +235,23 @@ int main(int argc, char* argv[]){
     else if(type == "tsp") {
         nlohmann::json out;
         out["id"] = event["id"];
+
+
         int optimal_cost = 1e9;
         vector<int> nodes = event["nodes"];
         vector<int> tour;
         TSPBruteForce(map, optimal_cost, tour, nodes);
         out["brute_force"]["optimal_cost"] = optimal_cost;
         out["brute_force"]["tour"] = tour;
+
+        int optimal_cost2 = 1e9;
+        vector<int> nodes2 = event["nodes"];
+        vector<int> tour2;
+        TSPHeldKarp(map, optimal_cost2, tour2, nodes2);
+        out["held_karp"]["optimal_cost"] = optimal_cost;
+        out["held_karp"]["tour"] = tour;
+
+        
         output_json["results"].push_back(out);
     }
 
