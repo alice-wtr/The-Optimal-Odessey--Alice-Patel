@@ -186,7 +186,61 @@ vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes){
     vector<vector<double>> dist = floyd_warshall(adj, nodes);
 
     vector<pair<int, int>> mst = prim_mst(dist);
+    vector<int> odd(0);
 
+    int n = nodes.size();
+
+    vector<int> degree(n, 0);
+    for (auto [u, v] : mst) {
+        degree[u]++;
+        degree[v]++;
+    }
+
+    vector<int> odd;
+    for (int i = 0; i < n; i++) {
+        if (degree[i] % 2)
+            odd.push_back(i);
+    }
+
+    vector<pair<int,int>> matching = perfect_matching(odd, dist);
+ 
+
+    vector<vector<pair<int,int>>> euler_adj(n);
+    int edge_id = 0;
+
+    for (auto [u, v] : mst) {
+        euler_adj[u].push_back({v, edge_id});
+        euler_adj[v].push_back({u, edge_id});
+        edge_id++;
+    }
+
+    for (auto [u, v] : matching) {
+        euler_adj[u].push_back({v, edge_id});
+        euler_adj[v].push_back({u, edge_id});
+        edge_id++;
+    }
+
+    vector<int> euler = eulerian_circuit(edge_id, euler_adj);
     
+    vector<int> tour;
+    vector<bool> visited(n, false);
+
+    for (int v : euler) {
+        if (!visited[v]) {
+            visited[v] = true;
+            tour.push_back(v);
+        }
+    }
+
+
+    tour.push_back(tour[0]);
+
+    vector<int> result;
+    for (int v : tour)
+        result.push_back(nodes[v]);
+
+    return result;
+
+       
 
 }
