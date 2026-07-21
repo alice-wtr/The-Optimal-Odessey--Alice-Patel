@@ -12,4 +12,4 @@ vector<int> eulerian_circuit(int m, vector<vector<pair<int,int>>>& adj_list);
 double tour_cost(const vector<int>& tour,vector<vector<double>>& dist);
 
 // Steps: Floyd-Warshall -> MST -> odd vertices -> matching -> Eulerian circuit -> shorcutting
-vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes);
+vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes, float& time_us, double& cost);

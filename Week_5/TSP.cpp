@@ -1,9 +1,11 @@
 #pragma once
+#include <iostream>
 #include <vector>
 #include <limits>
 #include <algorithm>
 #include <queue>
 #include <stack>
+#include <chrono>
 using namespace std;
 
 const double INF = numeric_limits<double>::infinity();
@@ -101,7 +103,7 @@ vector<pair<int,int>> perfect_matching(vector<int>& odds, vector<vector<double>>
 
         if (partner != -1) {
             matched[i] = true;
-            matched[partner] = true;
+            matched.at(partner) = true;
 
             
             matching.push_back({odds[i], odds[partner]});
@@ -114,6 +116,8 @@ vector<pair<int,int>> perfect_matching(vector<int>& odds, vector<vector<double>>
 
 vector<int> eulerian_circuit(int m, vector<vector<pair<int,int>>>& adj_list){
     //im assuming m is number of undirected edges
+
+    
 
     
     int n = adj_list.size();
@@ -133,6 +137,8 @@ vector<int> eulerian_circuit(int m, vector<vector<pair<int,int>>>& adj_list){
             ptr[u]++;
         }
 
+        
+
         // No unused edges left
         if (ptr[u] == adj_list[u].size()) {
             circuit.push_back(u);
@@ -143,6 +149,8 @@ vector<int> eulerian_circuit(int m, vector<vector<pair<int,int>>>& adj_list){
             used[id] = true;
             st.push(v);
         }
+
+        
     }
 
     reverse(circuit.begin(), circuit.end());
@@ -151,12 +159,15 @@ vector<int> eulerian_circuit(int m, vector<vector<pair<int,int>>>& adj_list){
 
     int l = circuit.size();
     for(int i = 0; i<l; i++) {
-        if(seen[i] == false) {
-            seen[i] = true;
+        if(seen[circuit[i]] == false) {
+            seen[circuit[i]] = true;
             path.push_back(i);
         }
 
     }
+
+    
+
     path.push_back(path[0]);
     return path;
 
@@ -181,12 +192,15 @@ double tour_cost(const vector<int>& tour, vector<vector<double>>& dist){
 
 
 // Steps: Floyd-Warshall -> MST -> odd vertices -> matching -> Eulerian circuit -> shorcutting
-vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes){
+vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes, float& time_us, double& cost){
+
+    auto start_time = chrono::high_resolution_clock::now();
+
 
     vector<vector<double>> dist = floyd_warshall(adj, nodes);
 
     vector<pair<int, int>> mst = prim_mst(dist);
-    vector<int> odd(0);
+   
 
     int n = nodes.size();
 
@@ -222,22 +236,29 @@ vector<int> christofides(vector<vector<double>>& adj,vector<int>& nodes){
 
     vector<int> euler = eulerian_circuit(edge_id, euler_adj);
     
+    
     vector<int> tour;
     vector<bool> visited(n, false);
 
     for (int v : euler) {
-        if (!visited[v]) {
-            visited[v] = true;
+        if (!visited.at(v)) {
+            visited.at(v) = true;
             tour.push_back(v);
         }
     }
 
+    cost = tour_cost(tour, dist);
+    
 
     tour.push_back(tour[0]);
 
     vector<int> result;
-    for (int v : tour)
-        result.push_back(nodes[v]);
+    for (int v : tour) result.push_back(nodes[v]);
+    
+
+    auto end_time = chrono::high_resolution_clock::now();
+
+    time_us = chrono::duration<float, milli>(end_time - start_time).count();
 
     return result;
 
